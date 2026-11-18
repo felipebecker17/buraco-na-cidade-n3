@@ -1,0 +1,75 @@
+# =====================================================================
+# Buraco na Cidade — API (Node.js) + MySQL + Redis com Docker Compose
+#   1) cp .env.example .env        (Windows: copy .env.example .env)
+#   2) docker compose up -d --build
+#   3) http://localhost:3000       (painel)  |  http://localhost:3000/health
+# Os valores ${...} vêm do arquivo .env (o Compose lê o .env automaticamente).
+# =====================================================================
+name: buraco-na-cidade
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?defina MYSQL_ROOT_PASSWORD no arquivo .env}
+      MYSQL_DATABASE: ${DB_NAME:?defina DB_NAME no arquivo .env}
+      MYSQL_USER: ${DB_USER:?defina DB_USER no arquivo .env}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD no arquivo .env}
+    volumes:
+      # VOLUME nomeado: os dados ficam fora do container e sobrevivem a "down" + "up"
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      # Só fica "healthy" quando o MySQL aceita conexão TCP de verdade
+      # ($$ = "$" literal, para a variável ser lida DENTRO do container)
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: ./app
+      args:
+        APP_VERSION: "1.0"
+    image: buraco-api:1.0
+    restart: unless-stopped
+    environment:
+      # A API recebe só o que precisa (não recebe a senha de root do MySQL)
+      PORT: 3000
+      DB_HOST: mysql          # nome do serviço = nome DNS dentro da rede do Compose
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      CACHE_TTL_SECONDS: ${CACHE_TTL_SECONDS:-30}
+      APP_CIDADE: ${APP_CIDADE:-Cuiabá, MT}
+    ports:
+      - "${API_PORT:-3000}:3000"
+    depends_on:
+      # Só cria a API depois que MySQL e Redis passarem no healthcheck
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  mysql-data:
