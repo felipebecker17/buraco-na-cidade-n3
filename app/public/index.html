@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buraco na Cidade — Painel</title>
+<style>
+  :root{--ink:#161a20;--muted:#5b6472;--line:#d7dce2;--bg:#f6f8fa;--accent:#108245;--accent-soft:#e2f5ea;
+        --red:#d03b3b;--amber:#9c6209;--done:#1f66c4;--v2:#1f66c4;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  header{background:#fff;border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .logo{width:38px;height:38px;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+  header h1{font-size:17px;margin:0}
+  header p{margin:0;font-size:12px;color:var(--muted)}
+  .grow{flex:1}
+  .ver{font-size:12px;font-weight:800;padding:6px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+  .ver.v2{background:#e5eefa;color:var(--v2)}
+  .pod{font-size:11.5px;color:var(--muted);font-family:ui-monospace,Menlo,Consolas,monospace}
+  .banner{display:none;background:var(--v2);color:#fff;text-align:center;font-size:13px;font-weight:700;padding:8px}
+  main{max-width:1000px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:320px 1fr;gap:18px}
+  @media (max-width:760px){main{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 12px}
+  label{display:block;font-size:12px;font-weight:700;margin:10px 0 4px}
+  input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:13px}
+  button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff}
+  button.sec{background:#fff;border:1px solid var(--line);color:var(--ink);padding:6px 10px;font-size:12px}
+  .stats{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .stat{flex:1;min-width:90px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+  .stat b{display:block;font-size:20px}
+  .stat span{font-size:11px;color:var(--muted)}
+  .item{display:flex;gap:10px;align-items:center;border-top:1px solid var(--line);padding:10px 0}
+  .item:first-child{border-top:0}
+  .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+  .s-aberta{background:var(--red)} .s-reconhecida,.s-em_execucao{background:var(--amber)} .s-resolvida,.s-confirmada{background:var(--done)}
+  .meta{font-size:11.5px;color:var(--muted)}
+  .msg{font-size:12px;margin-top:8px;min-height:16px}
+  footer{text-align:center;font-size:12px;color:var(--muted);margin:20px 0 40px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="banner" id="banner"></div>
+<header>
+  <div class="logo">BC</div>
+  <div class="grow">
+    <h1>Buraco na Cidade</h1>
+    <p id="cidade">Painel da API — Node.js + MySQL + Redis</p>
+  </div>
+  <span class="pod" id="pod">pod: …</span>
+  <span class="ver" id="ver">v…</span>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Novo reporte</h2>
+    <form id="form">
+      <label for="endereco">Endereço *</label>
+      <input id="endereco" required maxlength="200" placeholder="Rua das Palmeiras, 245">
+      <label for="bairro">Bairro</label>
+      <input id="bairro" maxlength="100" placeholder="Jardim">
+      <label for="severidade">Severidade</label>
+      <select id="severidade"><option value="leve">Leve</option><option value="moderado" selected>Moderado</option><option value="grave">Grave</option></select>
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" rows="3" placeholder="Detalhes do buraco..."></textarea>
+      <div style="margin-top:12px"><button type="submit">Enviar reporte</button></div>
+      <div class="msg" id="msg"></div>
+    </form>
+  </section>
+
+  <section>
+    <div class="stats" id="stats"></div>
+    <div class="card">
+      <h2>Ocorrências <span class="meta" id="cache"></span></h2>
+      <div id="lista"><p class="meta">Carregando…</p></div>
+    </div>
+  </section>
+</main>
+<footer>
+  <a href="/health">/health</a> · <a href="/api/ocorrencias">/api/ocorrencias</a> · <a href="/api/info">/api/info</a> ·
+  <a href="/prototipo.html">Protótipo das telas do app</a>
+</footer>
+
+<script>
+const ROTULO = {aberta:'Aberta',reconhecida:'Reconhecida',em_execucao:'Em execução',resolvida:'Resolvida',confirmada:'Confirmada'};
+const PROXIMO = {aberta:'reconhecida',reconhecida:'em_execucao',em_execucao:'resolvida',resolvida:'confirmada'};
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function info(){
+  const r = await fetch('/api/info'); const d = await r.json();
+  $('ver').textContent = 'v' + d.versao;
+  $('pod').textContent = 'pod: ' + d.pod + (d.visitas ? ' · visitas: ' + d.visitas : '');
+  $('cidade').textContent = 'Painel da API — ' + d.cidade;
+  if (String(d.versao).startsWith('2')) {           // mudança VISÍVEL da versão 2.0
+    $('ver').classList.add('v2');
+    $('banner').style.display = 'block';
+    $('banner').textContent = 'Nova versão 2.0 no ar — atualizada sem derrubar o serviço (rolling update)';
+  }
+}
+
+async function carregar(){
+  const [rl, rs] = await Promise.all([fetch('/api/ocorrencias'), fetch('/api/estatisticas')]);
+  if (!rl.ok) { $('lista').innerHTML = '<p class="meta">API sem banco no momento (' + rl.status + ')</p>'; return; }
+  const lista = await rl.json(); const st = await rs.json();
+  $('cache').textContent = '· cache Redis: ' + (rl.headers.get('X-Cache') || '-');
+  const cont = Object.fromEntries((st.porStatus || []).map(x => [x.status, Number(x.total)]));
+  $('stats').innerHTML = [['Total', st.total], ['Abertas', cont.aberta || 0],
+    ['Em andamento', (cont.reconhecida || 0) + (cont.em_execucao || 0)],
+    ['Resolvidas', (cont.resolvida || 0) + (cont.confirmada || 0)]]
+    .map(([l, n]) => `<div class="stat"><b>${n}</b><span>${l}</span></div>`).join('');
+  $('lista').innerHTML = lista.length ? lista.map(o => `
+    <div class="item">
+      <span class="dot s-${o.status}"></span>
+      <div class="grow"><b style="font-size:13px">#${o.id} · ${esc(o.endereco)}</b>
+        <div class="meta">${esc(o.bairro || '—')} · ${esc(o.severidade)} · ${ROTULO[o.status]} · ${new Date(o.criado_em).toLocaleString('pt-BR')}</div></div>
+      <button class="sec" onclick="apoiar(${o.id})">♥ ${o.apoios}</button>
+      ${PROXIMO[o.status] ? `<button class="sec" onclick="avancar(${o.id},'${PROXIMO[o.status]}')">→ ${ROTULO[PROXIMO[o.status]]}</button>` : ''}
+    </div>`).join('') : '<p class="meta">Nenhuma ocorrência ainda. Crie a primeira ao lado.</p>';
+}
+
+async function apoiar(id){ await fetch(`/api/ocorrencias/${id}/apoiar`, {method:'POST'}); carregar(); }
+async function avancar(id, status){
+  await fetch(`/api/ocorrencias/${id}/status`, {method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify({status})});
+  carregar();
+}
+
+$('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const body = {endereco: $('endereco').value, bairro: $('bairro').value || null,
+                severidade: $('severidade').value, descricao: $('descricao').value || null};
+  const r = await fetch('/api/ocorrencias', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+  const d = await r.json();
+  $('msg').textContent = r.ok ? `Reporte #${d.id} criado!` : ('Erro: ' + d.erro);
+  if (r.ok) { e.target.reset(); carregar(); }
+});
+
+info().catch(() => {}); carregar().catch(() => {});
+setInterval(() => { info().catch(() => {}); }, 5000);
+</script>
+</body>
+</html>

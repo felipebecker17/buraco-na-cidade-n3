@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Buraco na Cidade — Telas do App</title>
+<style>
+  :root{
+    --ink:#161a20;
+    --muted:#5b6472;
+    --faint:#8a93a1;
+    --line:#d7dce2;
+    --panel:#eef1f5;
+    --panel-2:#e3e8ee;
+    --accent:#108245;
+    --accent-dark:#0c6b38;
+    --accent-soft:#e2f5ea;
+    --red:#d03b3b;
+    --red-soft:#fbe8e8;
+    --amber:#9c6209;
+    --amber-soft:#faf1de;
+    --done:#1f66c4;
+    --done-soft:#e5eefa;
+    --bg:#f6f8fa;
+    --white:#ffffff;
+    --shadow: 0 2px 5px rgba(22,26,32,.05), 0 16px 32px -10px rgba(22,26,32,.15);
+    --shadow-lg: 0 22px 44px -12px rgba(22,26,32,.32);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#eef0f3;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    padding:28px 20px 60px;
+  }
+  .icon{width:20px;height:20px;flex:0 0 auto;}
+  .icon svg{width:100%;height:100%;display:block;}
+
+  /* ---------- top control bar ---------- */
+  .topbar-app{
+    max-width:1180px;margin:0 auto 22px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:12px;background:var(--accent);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;
+  }
+  .brand-text h1{font-size:15px;margin:0;}
+  .brand-text p{font-size:11.5px;color:var(--muted);margin:1px 0 0;}
+  .nav-pills{display:flex;gap:6px;flex-wrap:wrap;}
+  .nav-pill{
+    border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:7px 13px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;
+    transition:.15s;
+  }
+  .nav-pill:hover{border-color:var(--accent);color:var(--accent);}
+  .nav-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+  /* ---------- device frame ---------- */
+  .stage{max-width:1180px;margin:0 auto;display:flex;justify-content:center;}
+  .device{
+    width:375px;height:812px;
+    background:#111318;
+    border-radius:48px;
+    padding:12px;
+    box-shadow:var(--shadow-lg);
+    position:relative;
+  }
+  .device-notch{
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    width:120px;height:26px;background:#111318;border-radius:0 0 16px 16px;z-index:20;
+  }
+  .device-screen{
+    position:relative;
+    width:100%;height:100%;
+    background:var(--bg);
+    border-radius:36px;
+    overflow:hidden;
+  }
+  .statusbar{
+    height:44px;flex:0 0 44px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 24px;font-size:13px;font-weight:600;color:var(--ink);position:relative;z-index:15;background:transparent;
+  }
+  .statusbar .icons{display:flex;align-items:center;gap:4px;}
+
+  /* ---------- screens ---------- */
+  .screen{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    background:var(--bg);opacity:0;pointer-events:none;transform:translateX(10px);
+    transition:opacity .22s ease, transform .22s ease;
+  }
+  .screen.active{opacity:1;pointer-events:auto;transform:translateX(0);}
+  .screen-body{flex:1;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}
+  .screen-body::-webkit-scrollbar{display:none;}
+
+  /* ---------- shared components ---------- */
+  .app-header{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:6px 18px 12px;background:var(--bg);
+  }
+  .app-header.card{background:#fff;border-bottom:1px solid var(--line);padding:10px 18px;}
+  .app-header h2{font-size:15px;margin:0;}
+  .iconbtn{
+    width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    color:var(--ink);cursor:pointer;background:transparent;border:none;flex:0 0 auto;
+  }
+  .iconbtn:hover{background:var(--panel);}
+  .iconbtn.ghost{color:var(--muted);}
+
+  .btn{
+    border:none;border-radius:14px;padding:14px 20px;font-size:14px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
+    transition:transform .08s ease, box-shadow .15s;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px -4px rgba(16,130,69,.5);}
+  .btn-primary:hover{background:var(--accent-dark);}
+  .btn-outline{background:#fff;border:1.5px solid var(--line);color:var(--ink);}
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+  .btn-block{width:100%;}
+  .btn-sm{padding:10px 12px;font-size:12.5px;border-radius:12px;}
+
+  .field{
+    display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);
+    border-radius:14px;padding:12px 14px;font-size:13px;color:var(--muted);
+  }
+  .field input, .field textarea{
+    border:none;outline:none;font-size:13px;color:var(--ink);width:100%;font-family:inherit;background:transparent;
+  }
+  .field textarea{resize:none;}
+
+  .pill{
+    border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;
+    font-size:11.5px;font-weight:600;color:var(--muted);white-space:nowrap;cursor:pointer;
+  }
+  .pill.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+  .pill-row{display:flex;gap:6px;overflow-x:auto;padding:1px;}
+
+  .badge{
+    display:inline-flex;align-items:center;gap:4px;border-radius:7px;padding:4px 9px;
+    font-size:9.5px;font-weight:800;letter-spacing:.03em;color:#fff;text-transform:uppercase;
+  }
+  .badge.b-red{background:var(--red);}
+  .badge.b-amber{background:var(--amber);}
+  .badge.b-done{background:var(--done);}
+
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  }
+
+  .section-title{
+    font-size:10.5px;font-weight:800;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;
+    margin:2px 0 2px;
+  }
+
+  .tabbar{
+    flex:0 0 64px;background:#fff;border-top:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-around;padding-bottom:8px;
+  }
+  .tab-item{
+    display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--faint);
+    font-size:9.5px;font-weight:600;cursor:pointer;flex:1;padding-top:8px;
+  }
+  .tab-item.active{color:var(--accent);}
+  .tab-item .icon{width:20px;height:20px;}
+
+  .photo-slot{
+    border-radius:18px;border:1.5px dashed var(--line);
+    background:linear-gradient(135deg,#eef2f7,#e7ecf2);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    color:var(--muted);text-align:center;padding:14px;cursor:pointer;
+  }
+  .photo-slot:hover{border-color:var(--accent);color:var(--accent);}
+  .photo-slot .icon{width:22px;height:22px;}
+  .photo-slot small{font-size:10px;color:var(--faint);}
+  .photo-slot.filled{
+    background:linear-gradient(135deg,#cfd8e3,#b9c5d3);color:#fff;border-style:solid;border-color:transparent;
+  }
+  .photo-slot.filled .icon, .photo-slot.filled small{color:rgba(255,255,255,.85);}
+
+  .avatar{
+    border-radius:50%;background:var(--panel-2);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700;flex:0 0 auto;
+  }
+
+  /* ---------- login screen ---------- */
+  #screen-login .screen-body{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:32px;text-align:center;gap:14px;background:linear-gradient(180deg,#fff 0%, var(--bg) 60%);
+  }
+  .login-logo{
+    width:68px;height:68px;border-radius:22px;background:var(--accent);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:24px;
+    box-shadow:0 10px 22px -6px rgba(16,130,69,.55);
+  }
+  .login-title{font-size:21px;font-weight:800;margin:2px 0 0;}
+  .login-sub{font-size:12.5px;color:var(--muted);max-width:260px;line-height:1.5;margin:0;}
+  .login-legal{font-size:10px;color:var(--faint);max-width:250px;line-height:1.5;}
+  .login-guest{font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;display:flex;align-items:center;gap:4px;}
+
+  /* ---------- mapa screen ---------- */
+  .map-wrap{
+    margin:0 16px 10px;border-radius:20px;overflow:hidden;position:relative;height:412px;
+    border:1px solid var(--line);
+    background:
+      repeating-linear-gradient(90deg, #dfe7d9 0 46px, #e8efe3 46px 92px),
+      linear-gradient(180deg,#eaf1e6,#e3ecdf);
+  }
+  .map-wrap::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(90deg, transparent 48%, #fff 48% 52%, transparent 52%) 0 0/100% 100%,
+      linear-gradient(0deg, transparent 30%, #fff 30% 34%, transparent 34%) 0 0/100% 100%,
+      linear-gradient(0deg, transparent 62%, #fff 62% 66%, transparent 66%) 0 0/100% 100%;
+    opacity:.9;
+  }
+  .map-pin{
+    position:absolute;width:26px;height:26px;transform:translate(-50%,-100%);z-index:2;
+    filter:drop-shadow(0 3px 4px rgba(0,0,0,.25));cursor:pointer;
+  }
+  .map-pin svg{width:100%;height:100%;}
+  .map-legend{
+    position:absolute;left:10px;bottom:10px;background:rgba(255,255,255,.94);backdrop-filter:blur(2px);
+    border-radius:9px;padding:6px 10px;font-size:9.5px;color:var(--muted);z-index:2;box-shadow:var(--shadow);
+  }
+  .fab{
+    position:absolute;right:18px;bottom:78px;width:56px;height:56px;border-radius:50%;
+    background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 22px -4px rgba(16,130,69,.55);cursor:pointer;z-index:30;
+  }
+  .fab:active{transform:scale(.96);}
+  .fab .icon{width:26px;height:26px;}
+
+  /* ---------- criar reporte ---------- */
+  .step-track{display:flex;align-items:center;gap:4px;margin:2px 0 4px;}
+  .step-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:9px;font-weight:800;color:#fff;background:var(--panel-2);flex:0 0 auto;}
+  .step-dot.done{background:var(--done);}
+  .step-dot.now{background:var(--accent);}
+  .step-dot.pending{background:var(--panel-2);color:var(--faint);}
+  .step-seg{flex:1;height:2px;background:var(--line);}
+  .step-seg.done{background:var(--done);}
+
+  /* ---------- detalhe / timeline ---------- */
+  .photo-carousel{
+    margin:0 0 8px;border-radius:18px;height:190px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#cfd8e3,#a9b8c9);
+  }
+  .photo-carousel .carousel-label{
+    position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+    background:rgba(0,0,0,.45);color:#fff;font-size:10px;padding:4px 10px;border-radius:999px;
+  }
+  .dots{display:flex;gap:4px;}
+  .dots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5);}
+  .dots span.on{background:#fff;}
+
+  .timeline-row{display:flex;gap:10px;}
+  .timeline-rail{display:flex;flex-direction:column;align-items:center;flex:0 0 auto;}
+  .timeline-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);margin-top:4px;}
+  .timeline-dot.muted{background:var(--panel-2);}
+  .timeline-line{width:1.5px;flex:1;background:var(--line);margin:3px 0;}
+
+  /* ---------- perfil ---------- */
+  .stat-box{
+    flex:1;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 6px;
+    text-align:center;
+  }
+  .stat-box .num{font-size:16px;font-weight:800;}
+  .stat-box .lbl{font-size:9.5px;color:var(--muted);margin-top:1px;}
+
+  .toggle{
+    width:38px;height:22px;border-radius:999px;background:var(--accent);position:relative;flex:0 0 auto;cursor:pointer;
+  }
+  .toggle .knob{
+    position:absolute;top:2px;left:18px;width:18px;height:18px;border-radius:50%;background:#fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.3);transition:.15s;
+  }
+  .toggle.off{background:var(--panel-2);}
+  .toggle.off .knob{left:2px;}
+
+  /* ---------- painel prefeitura ---------- */
+  .official-badge{
+    background:var(--accent-soft);color:var(--accent);font-size:9.5px;font-weight:800;
+    border-radius:7px;padding:4px 8px;letter-spacing:.03em;
+  }
+  .queue-thumb{
+    width:44px;height:44px;border-radius:9px;flex:0 0 auto;
+    background:linear-gradient(135deg,#cfd8e3,#b9c5d3);
+  }
+
+  footer.credits{max-width:1180px;margin:26px auto 0;font-size:11.5px;color:var(--muted);text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar-app">
+  <div class="brand">
+    <div class="brand-mark">BC</div>
+    <div class="brand-text">
+      <h1>Buraco na Cidade</h1>
+      <p>Telas do app — protótipo navegável em HTML</p>
+    </div>
+  </div>
+  <div class="nav-pills" id="navPills"></div>
+</div>
+
+<div class="stage">
+  <div class="device">
+    <div class="device-notch"></div>
+    <div class="device-screen" id="deviceScreen">
+
+      <!-- 1. LOGIN -->
+      <section class="screen active" id="screen-login" data-title="Login">
+        <div class="statusbar"><span>9:41</span><span class="icons">●●●●&nbsp;&nbsp;100%</span></div>
+        <div class="screen-body">
+          <div class="login-logo">BC</div>
+          <div class="login-title">Buraco na Cidade</div>
+          <p class="login-sub">Reporte, acompanhe e confirme a correção de buracos na sua cidade.</p>
+          <div style="height:8px"></div>
+          <button class="btn btn-primary btn-block" style="max-width:260px" data-nav="screen-mapa">
+            <span class="icon" data-icon="google"></span> Entrar com Google
+          </button>
+          <p class="login-legal">Ao continuar, você concorda com os Termos e a Política de Privacidade (LGPD).</p>
+          <div class="login-guest" data-nav="screen-mapa">Ver mapa sem login <span class="icon" data-icon="chevron-right" style="width:14px;height:14px;"></span></div>
+        </div>
+      </section>
+
+      <!-- 2. MAPA -->
+      <section class="screen" id="screen-mapa" data-title="Mapa">
+        <div class="statusbar"><span>9:41</span><span class="icons">●●●●&nbsp;&nbsp;100%</span></div>
+        <div class="app-header card">
+          <h2>Cuiabá, MT <span style="color:var(--muted);font-weight:400;font-size:12px;">▾</span></h2>
+          <div class="avatar" style="width:32px;height:32px;font-size:11px;" data-nav="screen-perfil">MA</div>
+        </div>
+        <div class="screen-body">
+          <div style="padding:10px 16px 8px;">
+            <div class="field"><span class="icon" data-icon="search" style="color:var(--faint)"></span>Buscar endereço, bairro...</div>
+          </div>
+          <div style="padding:0 16px 10px;">
+            <div class="pill-row">
+              <span class="pill active">Todos</span>
+              <span class="pill">Abertos</span>
+              <span class="pill">Em execução</span>
+              <span class="pill">Resolvidos</span>
+            </div>
+          </div>
+          <div class="map-wrap">
+            <div class="map-pin" style="top:70px;left:70px;" data-nav="screen-detalhe" data-icon="pin-red"></div>
+            <div class="map-pin" style="top:150px;left:190px;" data-icon="pin-amber"></div>
+            <div class="map-pin" style="top:250px;left:110px;" data-icon="pin-done"></div>
+            <div class="map-pin" style="top:320px;left:250px;" data-icon="pin-red"></div>
+            <div class="map-pin" style="top:110px;left:270px;" data-icon="pin-amber"></div>
+            <div class="map-legend">124 ocorrências nesta área — toque em um pino</div>
+          </div>
+        </div>
+        <div class="fab" data-nav="screen-reporte"><span class="icon" data-icon="plus"></span></div>
+        <div class="tabbar">
+          <div class="tab-item active" data-nav="screen-mapa"><span class="icon" data-icon="map"></span>Mapa</div>
+          <div class="tab-item"><span class="icon" data-icon="award"></span>Ranking</div>
+          <div class="tab-item"><span class="icon" data-icon="bell"></span>Notificações</div>
+          <div class="tab-item" data-nav="screen-perfil"><span class="icon" data-icon="user"></span>Perfil</div>
+        </div>
+      </section>
+
+      <!-- 3. CRIAR REPORTE -->
+      <section class="screen" id="screen-reporte" data-title="Criar reporte">
+        <div class="statusbar"><span>9:41</span><span class="icons">●●●●&nbsp;&nbsp;100%</span></div>
+        <div class="app-header card">
+          <button class="iconbtn ghost" data-nav="screen-mapa"><span class="icon" data-icon="x"></span></button>
+          <h2>Novo reporte</h2>
+          <div style="width:34px"></div>
+        </div>
+        <div class="screen-body" style="padding:14px 16px 24px;display:flex;flex-direction:column;gap:10px;">
+          <div class="step-track">
+            <div class="step-dot done"><span class="icon" data-icon="check" style="width:11px;height:11px;color:#fff"></span></div>
+            <div class="step-seg done"></div>
+            <div class="step-dot now">2</div>
+            <div class="step-seg"></div>
+            <div class="step-dot pending">3</div>
+            <div class="step-seg"></div>
+            <div class="step-dot pending">4</div>
+          </div>
+
+          <div class="section-title">1. Foto do buraco *</div>
+          <div class="photo-slot filled" style="height:120px;">
+            <span class="icon" data-icon="camera"></span>
+            <small>Foto adicionada — toque para trocar</small>
+          </div>
+
+          <div class="section-title">2. Foto de referência (opcional)</div>
+          <div class="photo-slot" style="height:80px;">
+            <span class="icon" data-icon="camera"></span>
+            <small>Ponto próximo para localizar o buraco</small>
+          </div>
+
+          <div class="section-title">3. Localização</div>
+          <div class="map-wrap" style="height:90px;margin:0;">
+            <div class="map-pin" style="top:44px;left:170px;" data-icon="pin-red"></div>
+          </div>
+          <div class="field"><span class="icon" data-icon="map-pin" style="color:var(--faint)"></span>Rua das Palmeiras, 245 — Bairro Jardim</div>
+
+          <div class="section-title">Severidade</div>
+          <div class="pill-row">
+            <span class="pill">Leve</span>
+            <span class="pill active">Moderado</span>
+            <span class="pill">Grave</span>
+          </div>
+
+          <div class="section-title">Descrição (opcional)</div>
+          <div class="field" style="align-items:flex-start;height:60px;"><textarea placeholder="Conte mais detalhes sobre o buraco..." rows="2"></textarea></div>
+
+          <button class="btn btn-primary btn-block" style="margin-top:4px;" data-nav="screen-detalhe">Enviar reporte</button>
+        </div>
+      </section>
+
+      <!-- 4. DETALHE / TIMELINE -->
+      <section class="screen" id="screen-detalhe" data-title="Detalhe da ocorrência">
+        <div class="statusbar"><span>9:41</span><span class="icons">●●●●&nbsp;&nbsp;100%</span></div>
+        <div class="app-header card">
+          <button class="iconbtn ghost" data-nav="screen-mapa"><span class="icon" data-icon="chevron-left"></span></button>
+          <h2>Ocorrência #A1B2</h2>
+          <button class="iconbtn ghost"><span class="icon" data-icon="flag"></span></button>
+        </div>
+        <div class="screen-body" style="padding:14px 16px 24px;display:flex;flex-direction:column;gap:10px;">
+          <div class="photo-carousel">
+            <div class="carousel-label">Foto 1/3 — buraco</div>
+            <div class="dots" style="position:absolute;bottom:10px;right:12px;"><span class="on"></span><span></span><span></span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="badge b-amber">Em execução</span>
+            <span style="font-size:11px;color:var(--muted);">Aberta há 9 dias</span>
+          </div>
+          <div class="step-track">
+            <div class="step-dot done"><span class="icon" data-icon="check" style="width:10px;height:10px;color:#fff"></span></div>
+            <div class="step-seg done"></div>
+            <div class="step-dot done"><span class="icon" data-icon="check" style="width:10px;height:10px;color:#fff"></span></div>
+            <div class="step-seg done"></div>
+            <div class="step-dot now"></div>
+            <div class="step-seg"></div>
+            <div class="step-dot pending"></div>
+            <div class="step-seg"></div>
+            <div class="step-dot pending"></div>
+          </div>
+          <p style="font-size:9.5px;color:var(--faint);margin:0;">Aberta → Reconhecida → Em execução → Resolvida → Confirmada</p>
+          <div class="field"><span class="icon" data-icon="map-pin" style="color:var(--faint)"></span>Rua das Palmeiras, 245 — Secretaria de Obras</div>
+
+          <div class="section-title">Histórico</div>
+          <div class="timeline-row">
+            <div class="timeline-rail"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+            <div style="padding-bottom:10px;"><div style="font-size:11.5px;font-weight:700;">Prefeitura iniciou a execução — 12/08</div><div style="font-size:10.5px;color:var(--muted);">"Equipe agendada para esta semana."</div></div>
+          </div>
+          <div class="timeline-row">
+            <div class="timeline-rail"><div class="timeline-dot muted"></div><div class="timeline-line"></div></div>
+            <div style="padding-bottom:10px;"><div style="font-size:11.5px;font-weight:700;">Prefeitura reconheceu a ocorrência — 09/08</div></div>
+          </div>
+          <div class="timeline-row">
+            <div class="timeline-rail"><div class="timeline-dot muted"></div></div>
+            <div><div style="font-size:11.5px;font-weight:700;">Você reportou — 07/08</div></div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="btn btn-outline" style="flex:1;"><span class="icon" data-icon="heart" style="width:16px;height:16px;"></span>Apoiar (34)</button>
+            <button class="btn btn-outline" style="flex:1;"><span class="icon" data-icon="message" style="width:16px;height:16px;"></span>Comentar</button>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tab-item active" data-nav="screen-mapa"><span class="icon" data-icon="map"></span>Mapa</div>
+          <div class="tab-item"><span class="icon" data-icon="award"></span>Ranking</div>
+          <div class="tab-item"><span class="icon" data-icon="bell"></span>Notificações</div>
+          <div class="tab-item" data-nav="screen-perfil"><span class="icon" data-icon="user"></span>Perfil</div>
+        </div>
+      </section>
+
+      <!-- 5. PERFIL -->
+      <section class="screen" id="screen-perfil" data-title="Perfil">
+        <div class="statusbar"><span>9:41</span><span class="icons">●●●●&nbsp;&nbsp;100%</span></div>
+        <div class="app-header card">
+          <h2>Perfil</h2>
+          <button class="iconbtn ghost"><span class="icon" data-icon="settings"></span></button>
+        </div>
+        <div class="screen-body" style="padding:16px 16px 24px;display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="avatar" style="width:48px;height:48px;font-size:14px;">MA</div>
+            <div>
+              <div style="font-weight:800;font-size:14px;">Marcelo A.</div>
+              <div style="font-size:10.5px;color:var(--muted);">malveslinck@gmail.com</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <div class="stat-box"><div class="num">12</div><div class="lbl">reportes</div></div>
+            <div class="stat-box"><div class="num">8</div><div class="lbl">resolvidos</div></div>
+            <div class="stat-box"><div class="num">6 dias</div><div class="lbl">tempo médio</div></div>
+          </div>
+
+          <div class="section-title">Meus reportes</div>
+          <div class="card" style="padding:9px 11px;display:flex;align-items:center;gap:9px;">
+            <span class="badge b-amber" style="width:8px;height:8px;padding:0;border-radius:50%;"></span>
+            <div style="flex:1;"><div style="font-size:11.5px;font-weight:700;">Rua das Palmeiras, 245</div><div style="font-size:10px;color:var(--muted);">Em execução · 07/08</div></div>
+          </div>
+          <div class="card" style="padding:9px 11px;display:flex;align-items:center;gap:9px;">
+            <span class="badge b-done" style="width:8px;height:8px;padding:0;border-radius:50%;"></span>
+            <div style="flex:1;"><div style="font-size:11.5px;font-weight:700;">Av. Beira Rio, 900</div><div style="font-size:10px;color:var(--muted);">Confirmada · 22/07</div></div>
+          </div>
+          <div class="card" style="padding:9px 11px;display:flex;align-items:center;gap:9px;">
+            <span class="badge b-red" style="width:8px;height:8px;padding:0;border-radius:50%;"></span>
+            <div style="flex:1;"><div style="font-size:11.5px;font-weight:700;">Rua 13 de Junho, 55</div><div style="font-size:10px;color:var(--muted);">Aberta · 15/07</div></div>
+          </div>
+
+          <div class="section-title">Preferências</div>
+          <div class="field" style="justify-content:space-between;">
+            <span style="color:var(--ink);">Notificações push</span>
+            <div class="toggle"><div class="knob"></div></div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:6px;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;" data-nav="screen-prefeitura">
+            <span class="icon" data-icon="building" style="width:16px;height:16px;"></span>
+            Sou da prefeitura — abrir painel oficial
+            <span class="icon" data-icon="chevron-right" style="width:14px;height:14px;"></span>
+          </div>
+
+          <button class="btn btn-outline btn-block" data-nav="screen-login">
+            <span class="icon" data-icon="logout" style="width:16px;height:16px;"></span> Sair da conta
+          </button>
+        </div>
+        <div class="tabbar">
+          <div class="tab-item" data-nav="screen-mapa"><span class="icon" data-icon="map"></span>Mapa</div>
+          <div class="tab-item"><span class="icon" data-icon="award"></span>Ranking</div>
+          <div class="tab-item"><span class="icon" data-icon="bell"></span>Notificações</div>
+          <div class="tab-item active" data-nav="screen-perfil"><span class="icon" data-icon="user"></span>Perfil</div>
+        </div>
+      </section>
+
+      <!-- 6. PAINEL PREFEITURA -->
+      <section class="screen" id="screen-prefeitura" data-title="Painel da prefeitura">
+        <div class="statusbar"><span>9:41</span><span class="icons">●●●●&nbsp;&nbsp;100%</span></div>
+        <div class="app-header card">
+          <h2>Secretaria de Obras</h2>
+          <span class="official-badge">OFICIAL</span>
+        </div>
+        <div class="screen-body" style="padding:12px 16px 24px;display:flex;flex-direction:column;gap:10px;">
+          <div class="pill-row">
+            <span class="pill active">Novas (14)</span>
+            <span class="pill">Em execução (6)</span>
+            <span class="pill">Resolvidas</span>
+          </div>
+
+          <div class="card" style="padding:9px;display:flex;align-items:center;gap:9px;">
+            <div class="queue-thumb"></div>
+            <div style="flex:1;"><div style="font-size:11.5px;font-weight:700;">Rua 13 de Junho, 55</div><div style="font-size:10px;color:var(--red);">Grave · aberta há 32 dias ⚠</div></div>
+          </div>
+          <div class="card" style="padding:9px;display:flex;align-items:center;gap:9px;">
+            <div class="queue-thumb"></div>
+            <div style="flex:1;"><div style="font-size:11.5px;font-weight:700;">Av. Getúlio Vargas, 12</div><div style="font-size:10px;color:var(--muted);">Moderado · aberta há 5 dias</div></div>
+          </div>
+          <div class="card" style="padding:9px;display:flex;align-items:center;gap:9px;">
+            <div class="queue-thumb"></div>
+            <div style="flex:1;"><div style="font-size:11.5px;font-weight:700;">Rua das Palmeiras, 245</div><div style="font-size:10px;color:var(--muted);">Leve · aberta há 2 dias</div></div>
+          </div>
+
+          <div class="section-title">Ação rápida — ocorrência selecionada</div>
+          <div class="photo-slot" style="height:76px;">
+            <span class="icon" data-icon="camera"></span>
+            <small>Anexar foto do buraco tapado (obrigatória p/ resolver)</small>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-outline btn-sm" style="flex:1;">Reconhecer</button>
+            <button class="btn btn-outline btn-sm" style="flex:1;">Em execução</button>
+            <button class="btn btn-primary btn-sm" style="flex:1;" data-nav="screen-detalhe">Marcar resolvida</button>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tab-item active"><span class="icon" data-icon="inbox"></span>Fila</div>
+          <div class="tab-item"><span class="icon" data-icon="map"></span>Mapa da cidade</div>
+          <div class="tab-item"><span class="icon" data-icon="chart"></span>Indicadores</div>
+          <div class="tab-item" data-nav="screen-perfil"><span class="icon" data-icon="user"></span>Perfil</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<footer class="credits">Protótipo estático em HTML/CSS/JS — clique nos elementos azuis ou use os atalhos acima para navegar entre as telas.</footer>
+
+<script>
+const ICONS = {
+  search: '<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+  bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+  map: '<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>',
+  award: '<circle cx="12" cy="8" r="6"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/>',
+  user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  plus: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  camera: '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+  'chevron-left': '<polyline points="15 18 9 12 15 6"/>',
+  'chevron-right': '<polyline points="9 18 15 12 9 6"/>',
+  x: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+  flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+  heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6z"/>',
+  message: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+  logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+  check: '<polyline points="20 6 9 17 4 12"/>',
+  building: '<rect x="3" y="4" width="7" height="17"/><rect x="14" y="9" width="7" height="12"/><line x1="6" y1="8" x2="6" y2="8"/><line x1="6" y1="12" x2="6" y2="12"/><line x1="6" y1="16" x2="6" y2="16"/>',
+  chart: '<polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/>',
+  inbox: '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+  'map-pin': '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+  google: '<path fill="#4285F4" stroke="none" d="M21.6 12.23c0-.68-.06-1.36-.18-2H12v3.79h5.4a4.6 4.6 0 0 1-2 3.02v2.5h3.23c1.9-1.75 2.97-4.32 2.97-7.31z"/><path fill="#34A853" stroke="none" d="M12 22c2.7 0 4.96-.89 6.62-2.42l-3.23-2.5c-.9.6-2.05.96-3.39.96-2.6 0-4.8-1.76-5.6-4.12H3.06v2.58A10 10 0 0 0 12 22z"/><path fill="#FBBC05" stroke="none" d="M6.4 13.92a5.98 5.98 0 0 1 0-3.84V7.5H3.06a10 10 0 0 0 0 9l3.34-2.58z"/><path fill="#EA4335" stroke="none" d="M12 5.98c1.47 0 2.79.5 3.82 1.5l2.87-2.87A9.96 9.96 0 0 0 12 2a10 10 0 0 0-8.94 5.5l3.34 2.58c.8-2.36 3-4.1 5.6-4.1z"/>'
+};
+const PIN_COLORS = { 'pin-red': '#d03b3b', 'pin-amber': '#9c6209', 'pin-done': '#1f66c4' };
+
+function renderIcons(){
+  document.querySelectorAll('[data-icon]').forEach(el => {
+    const name = el.dataset.icon;
+    if (PIN_COLORS[name]) {
+      el.innerHTML = `<svg viewBox="0 0 24 24"><path fill="${PIN_COLORS[name]}" stroke="#fff" stroke-width="1.5" d="M12 0C6.5 0 2 4.5 2 10c0 7.5 10 14 10 14s10-6.5 10-14c0-5.5-4.5-10-10-10z"/><circle cx="12" cy="10" r="4" fill="#fff"/></svg>`;
+      return;
+    }
+    if (name === 'google') {
+      el.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#ffffff"/></svg>`;
+      el.querySelector('svg').insertAdjacentHTML('beforeend', ICONS.google);
+      return;
+    }
+    if (ICONS[name]) {
+      el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[name]}</svg>`;
+    }
+  });
+}
+
+const SCREEN_ORDER = ['screen-login','screen-mapa','screen-reporte','screen-detalhe','screen-perfil','screen-prefeitura'];
+
+function buildNavPills(){
+  const wrap = document.getElementById('navPills');
+  SCREEN_ORDER.forEach(id => {
+    const title = document.getElementById(id).dataset.title;
+    const pill = document.createElement('div');
+    pill.className = 'nav-pill';
+    pill.textContent = title;
+    pill.dataset.nav = id;
+    wrap.appendChild(pill);
+  });
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+  document.querySelectorAll('.nav-pill').forEach(p => p.classList.toggle('active', p.dataset.nav === id));
+  document.querySelectorAll('.tab-item[data-nav]').forEach(t => {});
+}
+
+document.addEventListener('click', (e) => {
+  const target = e.target.closest('[data-nav]');
+  if (target) showScreen(target.dataset.nav);
+});
+
+renderIcons();
+buildNavPills();
+showScreen('screen-login');
+</script>
+</body>
+</html>
