@@ -1,0 +1,24 @@
+# Referência: o MESMO HPA que o comando abaixo cria, em forma declarativa.
+#   kubectl autoscale deployment api --cpu-percent=50 --min=2 --max=6 -n n3-felipe
+# (Na Parte 4 o HPA é criado pelo comando; este arquivo é só para estudo/reuso.)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api
+  namespace: n3-felipe
+  labels:
+    projeto: buraco-na-cidade
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50

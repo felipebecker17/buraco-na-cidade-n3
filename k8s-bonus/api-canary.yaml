@@ -1,0 +1,70 @@
+# BÔNUS — Estratégia CANARY
+# Um segundo Deployment com a versão NOVA (2.0) e só 1 réplica.
+# Ele usa a MESMA label "app: api" que o Service seleciona, mas "track: canary".
+# Resultado: com 2 pods stable (1.0) + 1 pod canary (2.0), o Service manda
+# ~1/3 das requisições para a versão nova. Se der problema, basta apagar
+# este Deployment; se der certo, promove a 2.0 no Deployment principal.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-canary
+  namespace: n3-felipe
+  labels:
+    app: api
+    track: canary
+    projeto: buraco-na-cidade
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: api
+        track: canary
+        projeto: buraco-na-cidade
+    spec:
+      containers:
+        - name: api
+          image: buraco-api:2.0
+          imagePullPolicy: IfNotPresent
+          # Segurança: roda como usuário comum (uid 1000 = "node"), sem escalar privilégio
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          ports:
+            - name: http
+              containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: api-config
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3

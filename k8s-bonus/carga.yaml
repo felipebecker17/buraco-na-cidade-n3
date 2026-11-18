@@ -1,0 +1,32 @@
+# Gerador de carga DENTRO do cluster (equivalente ao "kubectl create deployment carga ...").
+# Faz requisições sem parar na rota /api/carga, que gasta CPU de propósito.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carga
+  namespace: n3-felipe
+  labels:
+    app: carga
+    projeto: buraco-na-cidade
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: carga
+  template:
+    metadata:
+      labels:
+        app: carga
+        projeto: buraco-na-cidade
+    spec:
+      containers:
+        - name: carga
+          image: busybox:1.36
+          command: ["sh", "-c", "while true; do wget -q -O- http://api-interno/api/carga > /dev/null; done"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 8Mi
+            limits:
+              cpu: 100m
+              memory: 32Mi
