@@ -1,0 +1,15 @@
+﻿# 2026-11-18 14:09:28  |  namespace: n3-felipe
+# PS> kubectl get endpoints -n n3-felipe
+kubectl : Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+No linha:1 caractere:1
++ kubectl get endpoints -n n3-felipe 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Warning: v1 End...1 EndpointSlice:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+NAME          ENDPOINTS                       AGE
+api           10.1.0.35:3000,10.1.0.40:3000   3h4m
+api-interno   10.1.0.35:3000,10.1.0.40:3000   3h4m
+mysql         10.1.0.26:3306                  3h4m
+redis         10.1.0.21:6379                  3h4m
+

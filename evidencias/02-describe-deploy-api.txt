@@ -1,0 +1,65 @@
+﻿# 2026-11-18 14:09:26  |  namespace: n3-felipe
+# PS> kubectl describe deployment api -n n3-felipe
+Name:                   api
+Namespace:              n3-felipe
+CreationTimestamp:      Wed, 18 Nov 2026 11:04:37 -0300
+Labels:                 app=api
+                        projeto=buraco-na-cidade
+Annotations:            deployment.kubernetes.io/revision: 5
+                        kubernetes.io/change-cause: ajuste de requests/limits (100m/96Mi - 300m/192Mi)
+Selector:               app=api,track=stable
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  0 max unavailable, 1 max surge
+Pod Template:
+  Labels:  app=api
+           projeto=buraco-na-cidade
+           track=stable
+  Containers:
+   api:
+    Image:      buraco-api:2.0
+    Port:       3000/TCP (http)
+    Host Port:  0/TCP (http)
+    Limits:
+      cpu:     300m
+      memory:  192Mi
+    Requests:
+      cpu:      100m
+      memory:   96Mi
+    Liveness:   http-get http://:http/health/live delay=10s timeout=3s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:http/health/ready delay=3s timeout=2s period=5s #success=1 #failure=3
+    Environment Variables from:
+      api-config  ConfigMap  Optional: false
+    Environment:
+      DB_PASSWORD:  <set to the key 'MYSQL_PASSWORD' in secret 'mysql-secret'>  Optional: false
+    Mounts:         <none>
+  Volumes:          <none>
+  Node-Selectors:   <none>
+  Tolerations:      <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  api-755d746844 (0/0 replicas created), api-84ff4d549f (0/0 replicas created), api-6b54d55867 (0/0 replicas created)
+NewReplicaSet:   api-5b46d745f9 (2/2 replicas created)
+Events:
+  Type    Reason             Age                From                   Message
+  ----    ------             ----               ----                   -------
+  Normal  ScalingReplicaSet  51m (x2 over 52m)  deployment-controller  Scaled up replica set api-755d746844 from 2 to 4
+  Normal  ScalingReplicaSet  49m (x2 over 51m)  deployment-controller  Scaled down replica set api-755d746844 from 4 to 2
+  Normal  ScalingReplicaSet  46m                deployment-controller  Scaled up replica set api-84ff4d549f from 0 to 1
+  Normal  ScalingReplicaSet  46m                deployment-controller  Scaled down replica set api-755d746844 from 2 to 1
+  Normal  ScalingReplicaSet  46m                deployment-controller  Scaled up replica set api-84ff4d549f from 1 to 2
+  Normal  ScalingReplicaSet  46m                deployment-controller  Scaled down replica set api-755d746844 from 1 to 0
+  Normal  ScalingReplicaSet  39m                deployment-controller  Scaled up replica set api-6b54d55867 from 0 to 1
+  Normal  ScalingReplicaSet  24m                deployment-controller  Scaled down replica set api-6b54d55867 from 1 to 0
+  Normal  ScalingReplicaSet  23m                deployment-controller  Scaled up replica set api-5b46d745f9 from 0 to 1
+  Normal  ScalingReplicaSet  23m                deployment-controller  Scaled down replica set api-84ff4d549f from 2 to 1
+  Normal  ScalingReplicaSet  23m                deployment-controller  Scaled up replica set api-5b46d745f9 from 1 to 2
+  Normal  ScalingReplicaSet  23m                deployment-controller  Scaled down replica set api-84ff4d549f from 1 to 0
+  Normal  ScalingReplicaSet  16m                deployment-controller  Scaled up replica set api-5b46d745f9 from 2 to 4
+  Normal  ScalingReplicaSet  15m                deployment-controller  Scaled up replica set api-5b46d745f9 from 4 to 6
+  Normal  ScalingReplicaSet  6m50s              deployment-controller  Scaled down replica set api-5b46d745f9 from 6 to 2
+

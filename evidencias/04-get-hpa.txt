@@ -1,0 +1,5 @@
+﻿# 2026-11-18 14:09:26  |  namespace: n3-felipe
+# PS> kubectl get hpa -n n3-felipe
+NAME   REFERENCE        TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+api    Deployment/api   cpu: 1%/50%   2         6         2          19m
+

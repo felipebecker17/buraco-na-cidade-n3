@@ -1,0 +1,30 @@
+﻿# 2026-11-18 14:09:25  |  namespace: n3-felipe
+# PS> kubectl get all -n n3-felipe -o wide
+NAME                         READY   STATUS    RESTARTS       AGE    IP          NODE             NOMINATED NODE   READINESS GATES
+pod/api-5b46d745f9-7x6hc     1/1     Running   0              16m    10.1.0.40   docker-desktop   <none>           <none>
+pod/api-5b46d745f9-szldf     1/1     Running   0              23m    10.1.0.35   docker-desktop   <none>           <none>
+pod/mysql-77bfd6bbd9-lbwxb   1/1     Running   0              161m   10.1.0.26   docker-desktop   <none>           <none>
+pod/redis-79c4d98ff6-6mjgp   1/1     Running   2 (166m ago)   3h4m   10.1.0.21   docker-desktop   <none>           <none>
+
+NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE    SELECTOR
+service/api           NodePort    10.99.25.191    <none>        3000:30080/TCP   3h4m   app=api
+service/api-interno   ClusterIP   10.99.131.163   <none>        80/TCP           3h4m   app=api
+service/mysql         ClusterIP   10.97.143.44    <none>        3306/TCP         3h4m   app=mysql
+service/redis         ClusterIP   10.107.72.48    <none>        6379/TCP         3h4m   app=redis
+
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES             SELECTOR
+deployment.apps/api     2/2     2            2           3h4m   api          buraco-api:2.0     app=api,track=stable
+deployment.apps/mysql   1/1     1            1           3h4m   mysql        mysql:8.4          app=mysql
+deployment.apps/redis   1/1     1            1           3h4m   redis        redis:7.4-alpine   app=redis
+
+NAME                               DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES                      SELECTOR
+replicaset.apps/api-5b46d745f9     2         2         2       23m    api          buraco-api:2.0              app=api,pod-template-hash=5b46d745f9,track=stable
+replicaset.apps/api-6b54d55867     0         0         0       39m    api          buraco-api:9.9-nao-existe   app=api,pod-template-hash=6b54d55867,track=stable
+replicaset.apps/api-755d746844     0         0         0       3h4m   api          buraco-api:1.0              app=api,pod-template-hash=755d746844,track=stable
+replicaset.apps/api-84ff4d549f     0         0         0       46m    api          buraco-api:2.0              app=api,pod-template-hash=84ff4d549f,track=stable
+replicaset.apps/mysql-77bfd6bbd9   1         1         1       3h4m   mysql        mysql:8.4                   app=mysql,pod-template-hash=77bfd6bbd9
+replicaset.apps/redis-79c4d98ff6   1         1         1       3h4m   redis        redis:7.4-alpine            app=redis,pod-template-hash=79c4d98ff6
+
+NAME                                      REFERENCE        TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/api   Deployment/api   cpu: 1%/50%   2         6         2          19m
+

@@ -1,0 +1,10 @@
+﻿# 2026-11-18 14:09:26  |  namespace: n3-felipe
+# PS> kubectl rollout history deployment/api -n n3-felipe
+deployment.apps/api 
+REVISION  CHANGE-CAUSE
+1         versao inicial 1.0 (kubectl apply -f k8s/)
+3         falha proposital: imagem inexistente
+4         atualiza para 2.0 (banner visivel)
+5         ajuste de requests/limits (100m/96Mi - 300m/192Mi)
+
+

@@ -1,0 +1,123 @@
+﻿# 2026-11-18 14:09:27  |  namespace: n3-felipe
+# PS> kubectl describe pod -n n3-felipe -l app=api
+Name:             api-5b46d745f9-7x6hc
+Namespace:        n3-felipe
+Priority:         0
+Service Account:  default
+Node:             docker-desktop/192.168.65.3
+Start Time:       Wed, 18 Nov 2026 13:52:36 -0300
+Labels:           app=api
+                  pod-template-hash=5b46d745f9
+                  projeto=buraco-na-cidade
+                  track=stable
+Annotations:      <none>
+Status:           Running
+IP:               10.1.0.40
+IPs:
+  IP:           10.1.0.40
+Controlled By:  ReplicaSet/api-5b46d745f9
+Containers:
+  api:
+    Container ID:   docker://a27747d8f40da31f7b46aef6a967fec2f3872acfc74e9ac6837ca6c2dd019f85
+    Image:          buraco-api:2.0
+    Image ID:       docker-pullable://buraco-api@sha256:4820c51aa071bc6a78d27b8dcc12a1bc2ededaf6fbaefbaffffeaa6397ca7138
+    Port:           3000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Wed, 18 Nov 2026 13:52:52 -0300
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     300m
+      memory:  192Mi
+    Requests:
+      cpu:      100m
+      memory:   96Mi
+    Liveness:   http-get http://:http/health/live delay=10s timeout=3s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:http/health/ready delay=3s timeout=2s period=5s #success=1 #failure=3
+    Environment Variables from:
+      api-config  ConfigMap  Optional: false
+    Environment:
+      DB_PASSWORD:  <set to the key 'MYSQL_PASSWORD' in secret 'mysql-secret'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-hfgrd (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-hfgrd:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+
+
+Name:             api-5b46d745f9-szldf
+Namespace:        n3-felipe
+Priority:         0
+Service Account:  default
+Node:             docker-desktop/192.168.65.3
+Start Time:       Wed, 18 Nov 2026 13:45:34 -0300
+Labels:           app=api
+                  pod-template-hash=5b46d745f9
+                  projeto=buraco-na-cidade
+                  track=stable
+Annotations:      <none>
+Status:           Running
+IP:               10.1.0.35
+IPs:
+  IP:           10.1.0.35
+Controlled By:  ReplicaSet/api-5b46d745f9
+Containers:
+  api:
+    Container ID:   docker://6e4c3d9affdd3718fcdae545955eed8d3c3b1ae8798eab090934840e2cfd3f10
+    Image:          buraco-api:2.0
+    Image ID:       docker-pullable://buraco-api@sha256:4820c51aa071bc6a78d27b8dcc12a1bc2ededaf6fbaefbaffffeaa6397ca7138
+    Port:           3000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Wed, 18 Nov 2026 13:45:35 -0300
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     300m
+      memory:  192Mi
+    Requests:
+      cpu:      100m
+      memory:   96Mi
+    Liveness:   http-get http://:http/health/live delay=10s timeout=3s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:http/health/ready delay=3s timeout=2s period=5s #success=1 #failure=3
+    Environment Variables from:
+      api-config  ConfigMap  Optional: false
+    Environment:
+      DB_PASSWORD:  <set to the key 'MYSQL_PASSWORD' in secret 'mysql-secret'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-m6zk7 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-m6zk7:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+

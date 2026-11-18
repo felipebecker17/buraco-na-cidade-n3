@@ -1,0 +1,8 @@
+﻿# 2026-11-18 14:09:27  |  namespace: n3-felipe
+# PS> kubectl top pods -n n3-felipe
+NAME                     CPU(cores)   MEMORY(bytes)   
+api-5b46d745f9-7x6hc     1m           33Mi            
+api-5b46d745f9-szldf     1m           33Mi            
+mysql-77bfd6bbd9-lbwxb   12m          435Mi           
+redis-79c4d98ff6-6mjgp   7m           29Mi            
+

@@ -1,0 +1,148 @@
+﻿# 2026-11-18 14:09:28  |  namespace: n3-felipe
+# PS> kubectl get events -n n3-felipe --sort-by=.lastTimestamp
+LAST SEEN   TYPE      REASON              OBJECT                        MESSAGE
+51m         Normal    Scheduled           pod/api-755d746844-x6ktx      Successfully assigned n3-felipe/api-755d746844-x6ktx to docker-desktop
+23m         Normal    Scheduled           pod/api-5b46d745f9-szldf      Successfully assigned n3-felipe/api-5b46d745f9-szldf to docker-desktop
+17m         Normal    Scheduled           pod/carga-6b6958ff78-4cl57    Successfully assigned n3-felipe/carga-6b6958ff78-4cl57 to docker-desktop
+46m         Normal    Scheduled           pod/api-84ff4d549f-lvfsl      Successfully assigned n3-felipe/api-84ff4d549f-lvfsl to docker-desktop
+52m         Normal    Scheduled           pod/api-755d746844-kd4kn      Successfully assigned n3-felipe/api-755d746844-kd4kn to docker-desktop
+15m         Normal    Scheduled           pod/api-5b46d745f9-r57gt      Successfully assigned n3-felipe/api-5b46d745f9-r57gt to docker-desktop
+23m         Normal    Scheduled           pod/api-5b46d745f9-cpbb6      Successfully assigned n3-felipe/api-5b46d745f9-cpbb6 to docker-desktop
+51m         Normal    Scheduled           pod/api-755d746844-d2gqr      Successfully assigned n3-felipe/api-755d746844-d2gqr to docker-desktop
+17m         Normal    Scheduled           pod/carga-6b6958ff78-bzm6b    Successfully assigned n3-felipe/carga-6b6958ff78-bzm6b to docker-desktop
+46m         Normal    Scheduled           pod/api-84ff4d549f-fgkth      Successfully assigned n3-felipe/api-84ff4d549f-fgkth to docker-desktop
+39m         Normal    Scheduled           pod/api-6b54d55867-gdc9s      Successfully assigned n3-felipe/api-6b54d55867-gdc9s to docker-desktop
+16m         Normal    Scheduled           pod/api-5b46d745f9-jvtcc      Successfully assigned n3-felipe/api-5b46d745f9-jvtcc to docker-desktop
+52m         Normal    Scheduled           pod/api-755d746844-zslxr      Successfully assigned n3-felipe/api-755d746844-zslxr to docker-desktop
+15m         Normal    Scheduled           pod/api-5b46d745f9-jwttw      Successfully assigned n3-felipe/api-5b46d745f9-jwttw to docker-desktop
+16m         Normal    Scheduled           pod/api-5b46d745f9-7x6hc      Successfully assigned n3-felipe/api-5b46d745f9-7x6hc to docker-desktop
+53m         Warning   Unhealthy           pod/api-755d746844-fzskk      Readiness probe failed: Get "http://10.1.0.25:3000/health/ready": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+52m         Normal    SuccessfulCreate    replicaset/api-755d746844     Created pod: api-755d746844-zslxr
+52m         Normal    SuccessfulCreate    replicaset/api-755d746844     Created pod: api-755d746844-kd4kn
+52m         Normal    Pulled              pod/api-755d746844-zslxr      Container image "buraco-api:1.0" already present on machine and can be accessed by the pod
+52m         Normal    Pulled              pod/api-755d746844-kd4kn      Container image "buraco-api:1.0" already present on machine and can be accessed by the pod
+52m         Normal    Created             pod/api-755d746844-kd4kn      Container created
+52m         Normal    Created             pod/api-755d746844-zslxr      Container created
+52m         Normal    Started             pod/api-755d746844-zslxr      Container started
+52m         Normal    Started             pod/api-755d746844-kd4kn      Container started
+52m         Warning   Unhealthy           pod/api-755d746844-zslxr      Liveness probe failed: Get "http://10.1.0.28:3000/health/live": dial tcp 10.1.0.28:3000: connect: connection refused
+52m         Warning   Unhealthy           pod/api-755d746844-kd4kn      Liveness probe failed: Get "http://10.1.0.29:3000/health/live": dial tcp 10.1.0.29:3000: connect: connection refused
+52m         Warning   Unhealthy           pod/api-755d746844-zslxr      Readiness probe failed: Get "http://10.1.0.28:3000/health/ready": dial tcp 10.1.0.28:3000: connect: connection refused
+52m         Normal    SuccessfulDelete    replicaset/api-755d746844     Deleted pod: api-755d746844-zslxr
+52m         Warning   Unhealthy           pod/api-755d746844-kd4kn      Readiness probe failed: Get "http://10.1.0.29:3000/health/ready": dial tcp 10.1.0.29:3000: connect: connection refused
+52m         Normal    Killing             pod/api-755d746844-kd4kn      Stopping container api
+52m         Normal    Killing             pod/api-755d746844-zslxr      Stopping container api
+52m         Normal    SuccessfulDelete    replicaset/api-755d746844     Deleted pod: api-755d746844-kd4kn
+51m         Normal    ScalingReplicaSet   deployment/api                Scaled up replica set api-755d746844 from 2 to 4
+51m         Normal    SuccessfulCreate    replicaset/api-755d746844     Created pod: api-755d746844-d2gqr
+51m         Normal    SuccessfulCreate    replicaset/api-755d746844     Created pod: api-755d746844-x6ktx
+51m         Normal    Pulled              pod/api-755d746844-d2gqr      Container image "buraco-api:1.0" already present on machine and can be accessed by the pod
+51m         Normal    Created             pod/api-755d746844-d2gqr      Container created
+51m         Normal    Pulled              pod/api-755d746844-x6ktx      Container image "buraco-api:1.0" already present on machine and can be accessed by the pod
+51m         Normal    Started             pod/api-755d746844-d2gqr      Container started
+51m         Normal    Created             pod/api-755d746844-x6ktx      Container created
+51m         Normal    Started             pod/api-755d746844-x6ktx      Container started
+49m         Normal    SuccessfulDelete    replicaset/api-755d746844     Deleted pod: api-755d746844-x6ktx
+49m         Normal    SuccessfulDelete    replicaset/api-755d746844     Deleted pod: api-755d746844-d2gqr
+49m         Warning   Unhealthy           pod/api-755d746844-d2gqr      Readiness probe failed: Get "http://10.1.0.30:3000/health/ready": dial tcp 10.1.0.30:3000: connect: connection refused
+49m         Normal    Killing             pod/api-755d746844-x6ktx      Stopping container api
+49m         Normal    ScalingReplicaSet   deployment/api                Scaled down replica set api-755d746844 from 4 to 2
+49m         Normal    Killing             pod/api-755d746844-d2gqr      Stopping container api
+46m         Normal    SuccessfulCreate    replicaset/api-84ff4d549f     Created pod: api-84ff4d549f-fgkth
+46m         Normal    ScalingReplicaSet   deployment/api                Scaled up replica set api-84ff4d549f from 0 to 1
+46m         Normal    Pulled              pod/api-84ff4d549f-fgkth      Container image "buraco-api:2.0" already present on machine and can be accessed by the pod
+46m         Normal    Created             pod/api-84ff4d549f-fgkth      Container created
+46m         Normal    Started             pod/api-84ff4d549f-fgkth      Container started
+46m         Warning   Unhealthy           pod/api-84ff4d549f-fgkth      Readiness probe failed: Get "http://10.1.0.32:3000/health/ready": dial tcp 10.1.0.32:3000: connect: connection refused
+46m         Warning   Unhealthy           pod/api-84ff4d549f-fgkth      Liveness probe failed: Get "http://10.1.0.32:3000/health/live": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+46m         Warning   Unhealthy           pod/api-84ff4d549f-fgkth      Readiness probe failed: Get "http://10.1.0.32:3000/health/ready": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+46m         Warning   Unhealthy           pod/api-84ff4d549f-fgkth      Readiness probe failed: HTTP probe failed with statuscode: 503
+46m         Normal    Killing             pod/api-755d746844-jrqbn      Stopping container api
+46m         Normal    ScalingReplicaSet   deployment/api                Scaled down replica set api-755d746844 from 2 to 1
+46m         Normal    SuccessfulDelete    replicaset/api-755d746844     Deleted pod: api-755d746844-jrqbn
+46m         Normal    SuccessfulCreate    replicaset/api-84ff4d549f     Created pod: api-84ff4d549f-lvfsl
+46m         Normal    ScalingReplicaSet   deployment/api                Scaled up replica set api-84ff4d549f from 1 to 2
+46m         Normal    Created             pod/api-84ff4d549f-lvfsl      Container created
+46m         Normal    Pulled              pod/api-84ff4d549f-lvfsl      Container image "buraco-api:2.0" already present on machine and can be accessed by the pod
+46m         Normal    Started             pod/api-84ff4d549f-lvfsl      Container started
+46m         Warning   Unhealthy           pod/api-755d746844-jrqbn      Readiness probe failed: Get "http://10.1.0.19:3000/health/ready": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+46m         Normal    ScalingReplicaSet   deployment/api                Scaled down replica set api-755d746844 from 1 to 0
+46m         Normal    Killing             pod/api-755d746844-fzskk      Stopping container api
+46m         Normal    SuccessfulDelete    replicaset/api-755d746844     Deleted pod: api-755d746844-fzskk
+39m         Normal    ScalingReplicaSet   deployment/api                Scaled up replica set api-6b54d55867 from 0 to 1
+39m         Normal    SuccessfulCreate    replicaset/api-6b54d55867     Created pod: api-6b54d55867-gdc9s
+36m         Normal    Pulling             pod/api-6b54d55867-gdc9s      Pulling image "buraco-api:9.9-nao-existe"
+36m         Warning   Failed              pod/api-6b54d55867-gdc9s      Error: ErrImagePull
+36m         Warning   Failed              pod/api-6b54d55867-gdc9s      Failed to pull image "buraco-api:9.9-nao-existe": Error response from daemon: pull access denied for buraco-api, repository does not exist or may require 'docker login'
+29m         Normal    BackOff             pod/api-6b54d55867-gdc9s      Back-off pulling image "buraco-api:9.9-nao-existe"
+29m         Warning   Failed              pod/api-6b54d55867-gdc9s      Error: ImagePullBackOff
+24m         Normal    SuccessfulDelete    replicaset/api-6b54d55867     Deleted pod: api-6b54d55867-gdc9s
+24m         Normal    ScalingReplicaSet   deployment/api                Scaled down replica set api-6b54d55867 from 1 to 0
+23m         Normal    SuccessfulCreate    replicaset/api-5b46d745f9     Created pod: api-5b46d745f9-szldf
+23m         Normal    ScalingReplicaSet   deployment/api                Scaled up replica set api-5b46d745f9 from 0 to 1
+23m         Normal    Created             pod/api-5b46d745f9-szldf      Container created
+23m         Normal    Pulled              pod/api-5b46d745f9-szldf      Container image "buraco-api:2.0" already present on machine and can be accessed by the pod
+23m         Normal    Started             pod/api-5b46d745f9-szldf      Container started
+23m         Normal    SuccessfulDelete    replicaset/api-84ff4d549f     Deleted pod: api-84ff4d549f-fgkth
+23m         Normal    ScalingReplicaSet   deployment/api                Scaled down replica set api-84ff4d549f from 2 to 1
+23m         Normal    Killing             pod/api-84ff4d549f-fgkth      Stopping container api
+23m         Normal    ScalingReplicaSet   deployment/api                Scaled up replica set api-5b46d745f9 from 1 to 2
+23m         Normal    SuccessfulCreate    replicaset/api-5b46d745f9     Created pod: api-5b46d745f9-cpbb6
+23m         Normal    Pulled              pod/api-5b46d745f9-cpbb6      Container image "buraco-api:2.0" already present on machine and can be accessed by the pod
+23m         Normal    Started             pod/api-5b46d745f9-cpbb6      Container started
+23m         Normal    Created             pod/api-5b46d745f9-cpbb6      Container created
+23m         Normal    ScalingReplicaSet   deployment/api                Scaled down replica set api-84ff4d549f from 1 to 0
+23m         Normal    Killing             pod/api-84ff4d549f-lvfsl      Stopping container api
+23m         Normal    SuccessfulDelete    replicaset/api-84ff4d549f     Deleted pod: api-84ff4d549f-lvfsl
+17m         Normal    SuccessfulCreate    replicaset/carga-6b6958ff78   Created pod: carga-6b6958ff78-bzm6b
+17m         Normal    SuccessfulCreate    replicaset/carga-6b6958ff78   Created pod: carga-6b6958ff78-4cl57
+17m         Normal    ScalingReplicaSet   deployment/carga              Scaled up replica set carga-6b6958ff78 from 0 to 2
+17m         Normal    Pulling             pod/carga-6b6958ff78-4cl57    Pulling image "busybox:1.36"
+17m         Normal    Pulling             pod/carga-6b6958ff78-bzm6b    Pulling image "busybox:1.36"
+17m         Normal    Pulled              pod/carga-6b6958ff78-bzm6b    Successfully pulled image "busybox:1.36" in 3.779s (3.779s including waiting). Image size: 6758127 bytes.
+17m         Normal    Started             pod/carga-6b6958ff78-bzm6b    Container started
+17m         Normal    Created             pod/carga-6b6958ff78-bzm6b    Container created
+17m         Normal    Pulled              pod/carga-6b6958ff78-4cl57    Successfully pulled image "busybox:1.36" in 2.153s (5.87s including waiting). Image size: 6758127 bytes.
+17m         Normal    Created             pod/carga-6b6958ff78-4cl57    Container created
+17m         Normal    Started             pod/carga-6b6958ff78-4cl57    Container started
+16m         Normal    SuccessfulRescale   horizontalpodautoscaler/api   New size: 4; reason: cpu resource utilization (percentage of request) above target
+16m         Normal    ScalingReplicaSet   deployment/api                Scaled up replica set api-5b46d745f9 from 2 to 4
+16m         Normal    SuccessfulCreate    replicaset/api-5b46d745f9     Created pod: api-5b46d745f9-7x6hc
+16m         Normal    SuccessfulCreate    replicaset/api-5b46d745f9     Created pod: api-5b46d745f9-jvtcc
+16m         Normal    Pulled              pod/api-5b46d745f9-jvtcc      Container image "buraco-api:2.0" already present on machine and can be accessed by the pod
+16m         Normal    Pulled              pod/api-5b46d745f9-7x6hc      Container image "buraco-api:2.0" already present on machine and can be accessed by the pod
+16m         Normal    Started             pod/api-5b46d745f9-jvtcc      Container started
+16m         Normal    Created             pod/api-5b46d745f9-jvtcc      Container created
+16m         Normal    Created             pod/api-5b46d745f9-7x6hc      Container created
+16m         Normal    Started             pod/api-5b46d745f9-7x6hc      Container started
+16m         Warning   Unhealthy           pod/mysql-77bfd6bbd9-lbwxb    Readiness probe failed: command timed out: "sh -c mysqladmin ping -h 127.0.0.1 -uroot -p\"$MYSQL_ROOT_PASSWORD\" --silent" timed out after 3s
+16m         Warning   Unhealthy           pod/api-5b46d745f9-jvtcc      Readiness probe failed: Get "http://10.1.0.39:3000/health/ready": dial tcp 10.1.0.39:3000: connect: connection refused
+16m         Warning   Unhealthy           pod/api-5b46d745f9-7x6hc      Liveness probe failed: Get "http://10.1.0.40:3000/health/live": dial tcp 10.1.0.40:3000: connect: connection refused
+16m         Warning   Unhealthy           pod/api-5b46d745f9-jvtcc      Liveness probe failed: Get "http://10.1.0.39:3000/health/live": dial tcp 10.1.0.39:3000: connect: connection refused
+16m         Warning   Unhealthy           pod/api-5b46d745f9-7x6hc      Readiness probe failed: Get "http://10.1.0.40:3000/health/ready": dial tcp 10.1.0.40:3000: connect: connection refused
+15m         Normal    SuccessfulRescale   horizontalpodautoscaler/api   New size: 6; reason: cpu resource utilization (percentage of request) above target
+15m         Normal    ScalingReplicaSet   deployment/api                Scaled up replica set api-5b46d745f9 from 4 to 6
+15m         Normal    SuccessfulCreate    replicaset/api-5b46d745f9     Created pod: api-5b46d745f9-jwttw
+15m         Normal    SuccessfulCreate    replicaset/api-5b46d745f9     Created pod: api-5b46d745f9-r57gt
+15m         Normal    Pulled              pod/api-5b46d745f9-r57gt      Container image "buraco-api:2.0" already present on machine and can be accessed by the pod
+15m         Normal    Created             pod/api-5b46d745f9-r57gt      Container created
+15m         Normal    Pulled              pod/api-5b46d745f9-jwttw      Container image "buraco-api:2.0" already present on machine and can be accessed by the pod
+15m         Normal    Started             pod/api-5b46d745f9-r57gt      Container started
+15m         Normal    Created             pod/api-5b46d745f9-jwttw      Container created
+15m         Normal    Started             pod/api-5b46d745f9-jwttw      Container started
+15m         Warning   Unhealthy           pod/api-5b46d745f9-jwttw      Readiness probe failed: Get "http://10.1.0.42:3000/health/ready": dial tcp 10.1.0.42:3000: connect: connection refused
+15m         Warning   Unhealthy           pod/api-5b46d745f9-r57gt      Readiness probe failed: Get "http://10.1.0.41:3000/health/ready": dial tcp 10.1.0.41:3000: connect: connection refused
+13m         Warning   Unhealthy           pod/redis-79c4d98ff6-6mjgp    Readiness probe failed: command timed out: "redis-cli ping" timed out after 1s
+12m         Normal    Killing             pod/carga-6b6958ff78-4cl57    Stopping container busybox
+12m         Normal    Killing             pod/carga-6b6958ff78-bzm6b    Stopping container busybox
+6m53s       Normal    Killing             pod/api-5b46d745f9-jwttw      Stopping container api
+6m53s       Normal    SuccessfulRescale   horizontalpodautoscaler/api   New size: 2; reason: All metrics below target
+6m53s       Normal    SuccessfulDelete    replicaset/api-5b46d745f9     Deleted pod: api-5b46d745f9-jwttw
+6m53s       Normal    Killing             pod/api-5b46d745f9-cpbb6      Stopping container api
+6m53s       Normal    ScalingReplicaSet   deployment/api                Scaled down replica set api-5b46d745f9 from 6 to 2
+6m53s       Normal    SuccessfulDelete    replicaset/api-5b46d745f9     Deleted pod: api-5b46d745f9-jvtcc
+6m53s       Normal    SuccessfulDelete    replicaset/api-5b46d745f9     Deleted pod: api-5b46d745f9-cpbb6
+6m53s       Normal    SuccessfulDelete    replicaset/api-5b46d745f9     Deleted pod: api-5b46d745f9-r57gt
+6m53s       Normal    Killing             pod/api-5b46d745f9-jvtcc      Stopping container api
+6m53s       Normal    Killing             pod/api-5b46d745f9-r57gt      Stopping container api
+

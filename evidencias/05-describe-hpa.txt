@@ -1,0 +1,26 @@
+﻿# 2026-11-18 14:09:26  |  namespace: n3-felipe
+# PS> kubectl describe hpa api -n n3-felipe
+Name:                                                  api
+Namespace:                                             n3-felipe
+Labels:                                                <none>
+Annotations:                                           <none>
+CreationTimestamp:                                     Wed, 18 Nov 2026 13:49:29 -0300
+Reference:                                             Deployment/api
+Metrics:                                               ( current / target )
+  resource cpu on pods  (as a percentage of request):  1% (1m) / 50%
+Min replicas:                                          2
+Max replicas:                                          6
+Deployment pods:                                       2 current / 2 desired
+Conditions:
+  Type            Status  Reason            Message
+  ----            ------  ------            -------
+  AbleToScale     True    ReadyForNewScale  recommended size matches current size
+  ScalingActive   True    ValidMetricFound  the HPA was able to successfully calculate a replica count from cpu resource utilization (percentage of request)
+  ScalingLimited  True    TooFewReplicas    the desired replica count is less than the minimum replica count
+Events:
+  Type    Reason             Age    From                       Message
+  ----    ------             ----   ----                       -------
+  Normal  SuccessfulRescale  16m    horizontal-pod-autoscaler  New size: 4; reason: cpu resource utilization (percentage of request) above target
+  Normal  SuccessfulRescale  15m    horizontal-pod-autoscaler  New size: 6; reason: cpu resource utilization (percentage of request) above target
+  Normal  SuccessfulRescale  6m51s  horizontal-pod-autoscaler  New size: 2; reason: All metrics below target
+
