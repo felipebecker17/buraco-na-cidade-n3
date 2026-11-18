@@ -1,3 +1,5 @@
+﻿> **Relatório da N3 (PDF):** [relatorio/Relatorio_N3_Felipe_Becker_ABNT.pdf](relatorio/Relatorio_N3_Felipe_Becker_ABNT.pdf)
+
 # Buraco na Cidade: API containerizada e orquestrada
 
 Atividade Avaliativa N3, DevOps & Cloud Computing (ADS, 4º semestre, UNIFASIPE, Prof. Marcelo Linck)
@@ -146,3 +148,4 @@ A Parte 4 inteira (escala, rolling update, falha + `rollout undo`, `set resource
 - `.env` está no `.gitignore`; só o `.env.example` (com senhas de exemplo) é versionado.
 - O Secret tem senhas **fictícias**. Em produção, usar um gerenciador de segredos (veja o relatório).
 - A API roda como usuário não-root, com `readOnlyRootFilesystem` e sem escalada de privilégio.
+
