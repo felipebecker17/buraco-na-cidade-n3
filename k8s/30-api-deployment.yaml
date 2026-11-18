@@ -1,0 +1,80 @@
+# Deployment da API: 2 réplicas, probes, requests/limits e rolling update
+# sem indisponibilidade (maxUnavailable: 0 => nunca fica com menos de 2 prontos).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: n3-felipe
+  labels:
+    app: api
+    projeto: buraco-na-cidade
+  annotations:
+    kubernetes.io/change-cause: "versao inicial 1.0 (kubectl apply -f k8s/)"
+spec:
+  replicas: 2
+  revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1          # pode criar 1 pod a mais durante a troca
+      maxUnavailable: 0    # nenhum pod antigo sai antes do novo estar pronto
+  selector:
+    matchLabels:
+      app: api
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: api           # o Service seleciona por esta label
+        track: stable
+        projeto: buraco-na-cidade
+    spec:
+      terminationGracePeriodSeconds: 20
+      containers:
+        - name: api
+          image: buraco-api:1.0
+          # IfNotPresent: usa a imagem construída localmente no Docker Desktop
+          imagePullPolicy: IfNotPresent
+          # Segurança: roda como usuário comum (uid 1000 = "node"), sem escalar privilégio
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          ports:
+            - name: http
+              containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: api-config
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+          resources:
+            requests:
+              cpu: 50m        # reserva mínima garantida (base do % do HPA)
+              memory: 64Mi
+            limits:
+              cpu: 250m       # teto: acima disso o container é "estrangulado"
+              memory: 128Mi   # acima disso o container é morto (OOMKilled)
+          # READINESS: só recebe tráfego quando o MySQL responde
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          # LIVENESS: só verifica se o processo Node está vivo
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3

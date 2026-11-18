@@ -1,0 +1,19 @@
+# ConfigMap: configurações NÃO sensíveis da API (viram variáveis de ambiente).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+  namespace: n3-felipe
+  labels:
+    app: api
+    projeto: buraco-na-cidade
+data:
+  PORT: "3000"
+  DB_HOST: "mysql"          # nome do Service do MySQL (DNS interno do cluster)
+  DB_PORT: "3306"
+  DB_NAME: "buraco"
+  DB_USER: "buraco"
+  REDIS_HOST: "redis"       # nome do Service do Redis
+  REDIS_PORT: "6379"
+  CACHE_TTL_SECONDS: "30"
+  APP_CIDADE: "Cuiabá, MT"

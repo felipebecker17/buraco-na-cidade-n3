@@ -1,0 +1,17 @@
+# Service ClusterIP do MySQL: nome DNS estável "mysql" (só acessível dentro do cluster).
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: n3-felipe
+  labels:
+    app: mysql
+    projeto: buraco-na-cidade
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: mysql

@@ -1,0 +1,21 @@
+# BÔNUS — segundo Service (ClusterIP) para a mesma API.
+# Justificativa: o NodePort expõe a API para fora do cluster (usuários);
+# este ClusterIP "api-interno" é o endereço que clientes DE DENTRO do cluster
+# usam (ex.: o gerador de carga do HPA, outros microsserviços), sem depender
+# de porta aberta no nó. Separa tráfego externo de tráfego interno.
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-interno
+  namespace: n3-felipe
+  labels:
+    app: api
+    projeto: buraco-na-cidade
+spec:
+  type: ClusterIP
+  selector:
+    app: api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

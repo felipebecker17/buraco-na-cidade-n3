@@ -1,0 +1,17 @@
+# PVC: pede 1 GiB de disco persistente ao cluster. O disco existe
+# independente do pod: se o pod do MySQL morrer, os dados continuam.
+# Sem storageClassName = usa a StorageClass padrão (no Docker Desktop: "hostpath").
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: n3-felipe
+  labels:
+    app: mysql
+    projeto: buraco-na-cidade
+spec:
+  accessModes:
+    - ReadWriteOnce        # montado em leitura/escrita por um nó por vez
+  resources:
+    requests:
+      storage: 1Gi

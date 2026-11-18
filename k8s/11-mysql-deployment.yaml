@@ -1,0 +1,81 @@
+# MySQL como Deployment de 1 réplica + PVC.
+# Justificativa: em laboratório (1 nó, 1 instância) o Deployment é suficiente e
+# simples. Em produção eu usaria StatefulSet (identidade estável + volume por
+# réplica) ou um banco gerenciado. strategy=Recreate evita que dois pods do
+# MySQL tentem usar o MESMO volume ao mesmo tempo durante uma atualização.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: n3-felipe
+  labels:
+    app: mysql
+    projeto: buraco-na-cidade
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+        projeto: buraco-na-cidade
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.4
+          ports:
+            - name: mysql
+              containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: DB_NAME
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: DB_USER
+          volumeMounts:
+            - name: dados
+              mountPath: /var/lib/mysql
+          resources:
+            requests:
+              cpu: 100m
+              memory: 384Mi
+            limits:
+              cpu: "1"
+              memory: 768Mi
+          # Pronto para receber conexões? (só então entra no Service)
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$MYSQL_ROOT_PASSWORD\" --silent"]
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 3
+          # Processo travado? (reinicia o container)
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 6
+      volumes:
+        - name: dados
+          persistentVolumeClaim:
+            claimName: mysql-pvc

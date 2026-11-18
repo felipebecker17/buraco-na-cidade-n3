@@ -1,0 +1,7 @@
+# Namespace: "pasta" lógica que isola todos os recursos deste trabalho no cluster.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: n3-felipe
+  labels:
+    projeto: buraco-na-cidade
