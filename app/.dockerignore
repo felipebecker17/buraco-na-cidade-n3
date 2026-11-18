@@ -1,0 +1,21 @@
+# O que NÃO deve ir para dentro da imagem (deixa o build mais rápido,
+# a imagem menor e evita vazar segredos)
+node_modules
+npm-debug.log*
+.npm
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+.vscode
+.idea
+*.md
+Dockerfile
+.dockerignore
+coverage
+test
+tests
+*.log
+.DS_Store
+Thumbs.db
